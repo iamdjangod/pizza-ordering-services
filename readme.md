@@ -58,7 +58,7 @@ curl -X POST \
   -H 'Content-Type: application/json' \
   -H 'cache-control: no-cache' \
   -d '{
-	"name": "Pepperoni 3",
+	"name": "Pepperoni 1",
 	"description": "new"
 }'
 ```
