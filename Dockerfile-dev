@@ -1,0 +1,16 @@
+FROM python:alpine3.7
+
+MAINTAINER Djangod <iamdjangod@gmail.com>
+ENV PYTHONUNBUFFERED 1
+
+# setup project code
+ENV INSTALL_PATH /usr/src
+WORKDIR $INSTALL_PATH
+COPY . .
+
+# We are using alpine, we need to install some required packages for psycopg2
+RUN apk update && apk add postgresql-dev gcc python3-dev musl-dev
+
+RUN pip install -r requirements/dev.txt
+
+# ENTRYPOINT $INSTALL_PATH'/entrypoint-dev.sh'

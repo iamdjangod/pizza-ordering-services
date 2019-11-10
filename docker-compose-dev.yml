@@ -1,0 +1,44 @@
+version: '3.3'
+services:
+   pos-api:
+     build:
+      context: .
+      dockerfile: Dockerfile-dev
+     image: pos-api:dev
+     volumes:
+       - .:/usr/src/
+     env_file:
+      - docker-dev.env
+     ports:
+       - "8000:8000"
+     restart: unless-stopped
+     command: ['/usr/src/entrypoint-dev.sh']
+     depends_on:
+       - pos-db
+     deploy:
+      placement:
+        constraints:
+          - node.labels.type==code
+      replicas: 1
+      update_config:
+        parallelism: 1
+        delay: 10s
+   pos-db:
+     image: postgres:11.1-alpine
+     volumes:
+       - pos-db:/var/lib/postgresql/data
+     environment:
+       - POSTGRES_DB=pos_db
+       - POSTGRES_USER=pos_user
+       - POSTGRES_PASSWORD=pos_pwd
+     deploy:
+       placement:
+         constraints:
+           - node.labels.type==database
+       replicas: 1
+       update_config:
+         parallelism: 1
+         delay: 10s
+
+volumes:
+  pos-db:
